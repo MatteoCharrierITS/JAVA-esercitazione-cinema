@@ -1,0 +1,31 @@
+# Source - https://stackoverflow.com/q/75246059
+# Posted by Jotter Kain, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-06-29, License - CC BY-SA 4.0
+
+services:
+  db:
+    container_name: cinema_esercitation
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=cinema
+      - PGDATA=/data/postgres
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5332:5432"
+    networks:
+      - db
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-realzioni_db}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db:
